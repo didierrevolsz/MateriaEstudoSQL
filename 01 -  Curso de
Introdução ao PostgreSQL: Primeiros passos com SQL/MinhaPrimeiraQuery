@@ -1,0 +1,172 @@
+﻿
+CREATE TABLE aluno(
+  id SERIAL,
+  nome VARCHAR(255),
+  cpf CHAR(11),
+  observacao TEXT,
+  idade INTEGER,
+  dinheiro NUMERIC(10,2),
+  altura REAL,
+  ativo BOOLEAN,
+  data_nascimento DATE,
+  hora_aula TIME,
+  matriculado_em TIMESTAMP
+);
+
+INSERT INTO aluno (nome, cpf, observacao, idade, dinheiro, altura, ativo, data_nascimento, hora_aula, matriculado_em) VALUES ('Aluno ficticio', '00000000000', 'Aluno graduando no curso de Bacharelado em Matemática', 27, 80.50, 1.78, TRUE, 
+'1992-10-01', '17:30:00', '2020-09-16 13:35:00'); 
+
+UPDATE aluno SET nome = 'Ivanildo Ferreira', dinheiro = 100.00, altura = 1.90
+WHERE id = 2;
+
+SELECT * FROM aluno;
+
+
+
+
+CREATE TABLE curso(
+id_curso SERIAL PRIMARY KEY,
+nome_curso VARCHAR (255) NOT NULL
+
+);
+
+INSERT INTO curso(nome_curso) values('Javascript Avançando');
+
+select * from curso;
+select nome_aluno from aluno_curso where aluno_id = 1;
+
+CREATE TABLE aluno(
+id_aluno SERIAL primary key,
+nome_aluno varchar (255) not null
+);
+
+insert into aluno(nome_aluno) values ('Gustavo Rodrigues');
+
+CREATE TABLE aluno_curso(
+aluno_id INTEGER,
+curso_id INTEGER,
+PRIMARY KEY(aluno_id, curso_id),
+FOREIGN KEY(aluno_id) REFERENCES aluno(id_aluno),
+FOREIGN KEY(curso_id) REFERENCES curso(id_curso)
+);
+
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (1,1);
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (2,1);
+
+
+
+
+__________________________________________________________________________________
+
+
+
+SELECT * FROM aluno;
+SELECT * FROM curso;
+
+
+SELECT aluno.nome_aluno as "NOME DO ALUNO", curso.nome_curso as "NOME DO CURSO"
+
+FROM aluno
+JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id_aluno
+JOIN curso       on curso.id_curso       = aluno_curso.curso_id
+
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (2,2);
+
+
+SELECT aluno.nome_aluno AS "NOME DO ALUNO", curso.nome_curso AS "NOME DO CURSO"
+from aluno
+FULL JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id_aluno
+FULL JOIN curso      on curso.id_curso       = aluno_curso.curso_id
+
+INSERT INTO aluno(nome_aluno) values ('MEMT9');
+INSERT INTO curso(nome_curso) values ('php');
+
+SELECT aluno.nome_aluno AS "NOME DO ALUNO", curso.nome_curso AS "NOME DO CURSO"
+from aluno
+cross curso
+
+
+drop table aluno_curso;
+
+CREATE TABLE aluno_curso(
+aluno_id INTEGER,
+curso_id INTEGER,
+PRIMARY KEY(aluno_id, curso_id),
+FOREIGN KEY(aluno_id) REFERENCES aluno(id_aluno) ON DELETE CASCADE ,
+FOREIGN KEY(curso_id) REFERENCES curso(id_curso) ON DELETE CASCADE 
+
+);
+
+
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (1,1);
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (2,1);
+
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (3,1);
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (1,3);
+
+
+DROP TABLE aluno_curso;
+
+CREATE TABLE aluno_curso(
+aluno_id INTEGER,
+curso_id INTEGER,
+PRIMARY KEY(aluno_id, curso_id),
+FOREIGN KEY(aluno_id) REFERENCES aluno(id_aluno) ON DELETE CASCADE ON UPDATE CASCADE ,
+FOREIGN KEY(curso_id) REFERENCES curso(id_curso) ON DELETE CASCADE ON UPDATE CASCADE
+
+);
+
+UPDATE aluno set id_aluno=3 where id_aluno=4;
+
+
+
+-- COUNT = retorna  a quantidade de registros;
+-- SUM   = retorna a soma dos registros;
+-- MAX  = retorna a maior valor dos registros;
+-- MIN   = retorna o menor valor dos registros;
+-- AVG   = retorna a média dos registros.
+
+INSERT INTO funcionarios(id,matricula,nome, sobrenome)VALUES(7,'M007','Gustavo', 'Rodrigues');
+
+UPDATE funcionarios
+set sobrenome='Rodrigues'
+where id = 7
+
+SELECT * 
+FROM funcionarios 
+ORDER BY id 
+LIMIT 5
+OFFSET 1; 
+
+
+SELECT COUNT (id),
+       SUM (id),
+       MAX (id),
+       MIN (id),
+       AVG (id)
+FROM funcionarios
+
+
+
+SELECT nome,sobrenome,
+COUNT (id)
+FROM funcionarios
+GROUP BY nome, sobrenome;
+
+
+SELECT * FROM aluno;
+SELECT * FROM curso;
+SELECT * FROM aluno_curso;
+
+
+SELECT curso.nome_curso,
+       COUNT (aluno.id_aluno)
+FROM curso
+LEFT JOIN aluno_curso ON aluno_curso.curso_id = curso.id_curso
+LEFT JOIN aluno on aluno.id_aluno = aluno_curso.aluno_id
+-- WHERE CURSO.NOME = 'javascript Intermediario' 
+GROUP BY 1
+HAVING COUNT (aluno.id_aluno) = 0
+
+
+
